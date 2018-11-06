@@ -4,6 +4,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import cn.web.utils.JdbcUtils;
 
@@ -14,27 +16,51 @@ public abstract class BaseDao<T> {
 	// 父类定义抽象方法,子类根据自身业务获取查询的结果集
 	protected abstract T getRow(ResultSet rs) throws SQLException;
 
-	// T: 只能代表某一个类型,具体可以交给子类指定
-	protected T getById(String sql, int id) {
-		T model = null;
+	public List<T> queryByName(String sql, Object[] param) {
+		List<T> tList = new ArrayList<T>();
 		Connection conn = null;
 		PreparedStatement pre = null;
 		ResultSet rs = null;
 		try {
 			conn = JdbcUtils.getConnection();
 			pre = conn.prepareStatement(sql);
-			pre.setInt(1, id);
-			rs = pre.executeQuery();
-			if (rs.next()) {
-				model = this.getRow(rs);
+			for (int i = 0; i < param.length; i++) {
+				pre.setObject(i + 1, param[i]);
 			}
-			return model;
+			rs = pre.executeQuery();
+			while (rs.next()) {
+				T t = this.getRow(rs);
+				tList.add(t);
+			}
+			return tList;
 		} catch (SQLException e) {
 			throw new RuntimeException(e);
 		} finally {
 			JdbcUtils.close(conn, pre);
 		}
 	}
+
+	// // T: 只能代表某一个类型,具体可以交给子类指定
+	// protected T getById(String sql, int id) {
+	// T model = null;
+	// Connection conn = null;
+	// PreparedStatement pre = null;
+	// ResultSet rs = null;
+	// try {
+	// conn = JdbcUtils.getConnection();
+	// pre = conn.prepareStatement(sql);
+	// pre.setInt(1, id);
+	// rs = pre.executeQuery();
+	// if (rs.next()) {
+	// model = this.getRow(rs);
+	// }
+	// return model;
+	// } catch (SQLException e) {
+	// throw new RuntimeException(e);
+	// } finally {
+	// JdbcUtils.close(conn, pre);
+	// }
+	// }
 
 	// 通常把数据的插入、更新、和删除理解成广义更新
 	protected int update(String sql, Object[] param) {

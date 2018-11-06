@@ -2,7 +2,6 @@ package cn.web.dao;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Date;
 import java.util.List;
 
 import cn.web.model.Product;
@@ -33,20 +32,25 @@ public class ProductDaoImpl extends BaseDao<Product> {
 		// daoImpl.delete(5);
 		Product product = daoImpl.getById(1);
 		System.out.println(product);
+		// List<Product> proList = daoImpl.queryByName("西服");
+		// for (Product temp : proList) {
+		// System.out.println(temp);
+		// }
 	}
 
 	public Product getById(int id) {
 		String sql = "select * from product where id = ?";
-		return super.getById(sql, id);
+		List<Product> proList = super.queryByName(sql, new Object[] { id });
+		return proList.size() > 0 ? proList.get(0) : null;
 	}
 
 	// ctrl + D 删除当前行
 	// ctrl + shift + o 导入导出包
 	// ctrl + 2,L
 	// shift + alt + A 开启列删除
-	public List<Product> queryByName(String keyworld) {
-		new Date();
-		return null;
+	public List<Product> queryByName(String keyword) {
+		String sql = "select * from product where name like ?";
+		return super.queryByName(sql, new Object[] { "%" + keyword + "%" });
 	}
 
 	public int update(Product product) {
