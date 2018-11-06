@@ -39,8 +39,8 @@ public class ProductDaoImpl extends BaseDao<Product> {
 	}
 
 	public Product getById(int id) {
-		String sql = "select * from product where id = ?";
-		List<Product> proList = super.queryByName(sql, new Object[] { id });
+		String sql = "select id,name from product where id = ?";
+		List<Product> proList = super.queryByName(sql, id);
 		return proList.size() > 0 ? proList.get(0) : null;
 	}
 
@@ -50,7 +50,7 @@ public class ProductDaoImpl extends BaseDao<Product> {
 	// shift + alt + A 开启列删除
 	public List<Product> queryByName(String keyword) {
 		String sql = "select * from product where name like ?";
-		return super.queryByName(sql, new Object[] { "%" + keyword + "%" });
+		return super.queryByName(sql, "%" + keyword + "%");
 	}
 
 	public int update(Product product) {
@@ -61,7 +61,7 @@ public class ProductDaoImpl extends BaseDao<Product> {
 
 	public int delete(int id) {
 		String sql = "delete from product where id = ?";
-		return super.update(sql, new Object[] { id });
+		return super.update(sql, id);
 	}
 
 	public int save(Product product) {

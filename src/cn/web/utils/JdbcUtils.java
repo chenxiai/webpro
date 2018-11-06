@@ -2,6 +2,7 @@ package cn.web.utils;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
@@ -31,21 +32,34 @@ public class JdbcUtils {
 	}
 
 	public static void close(Connection connection, Statement pre) {
+		close(connection, pre, null);
+	}
+
+	public static void close(Connection connection, Statement pre, ResultSet rs) {
 		try {
-			if (pre != null && !pre.isClosed()) {
-				pre.close();
+			if (rs != null && !rs.isClosed()) {
+				rs.close();
 			}
 		} catch (SQLException e) {
 			throw new RuntimeException(e);
 		} finally {
 			try {
-				if (connection != null && connection.isClosed()) {
-					connection.close();
+				if (pre != null && !pre.isClosed()) {
+					pre.close();
 				}
 			} catch (SQLException e) {
 				throw new RuntimeException(e);
+			} finally {
+				try {
+					if (connection != null && connection.isClosed()) {
+						connection.close();
+					}
+				} catch (SQLException e) {
+					throw new RuntimeException(e);
+				}
 			}
 		}
+
 	}
 
 	public static void main(String[] args) {

@@ -16,7 +16,8 @@ public abstract class BaseDao<T> {
 	// 父类定义抽象方法,子类根据自身业务获取查询的结果集
 	protected abstract T getRow(ResultSet rs) throws SQLException;
 
-	public List<T> queryByName(String sql, Object[] param) {
+	// 可变参数就是数组,但是它比数组写法更灵活
+	public List<T> queryByName(String sql, Object... param) {
 		List<T> tList = new ArrayList<T>();
 		Connection conn = null;
 		PreparedStatement pre = null;
@@ -36,7 +37,7 @@ public abstract class BaseDao<T> {
 		} catch (SQLException e) {
 			throw new RuntimeException(e);
 		} finally {
-			JdbcUtils.close(conn, pre);
+			JdbcUtils.close(conn, pre, rs);
 		}
 	}
 
@@ -63,7 +64,7 @@ public abstract class BaseDao<T> {
 	// }
 
 	// 通常把数据的插入、更新、和删除理解成广义更新
-	protected int update(String sql, Object[] param) {
+	protected int update(String sql, Object... param) {
 		Connection conn = null;
 		PreparedStatement pre = null;
 		try {
