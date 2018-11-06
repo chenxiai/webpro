@@ -2,13 +2,24 @@ package cn.web.model;
 
 import java.sql.Date;
 
-public class Product {
+// 数据库表对应Java的类
+// 表的记录对应Java的对象
+// 表的字段对应Java属性
+// 表的字段属性值,对应Java属性的值
+public class Product extends Object {
 
 	private Integer id;
 	private String name;
 	private Double price;
 	private String remark;
 	private Date date;
+
+	// alt + shift + s
+	@Override
+	public String toString() {
+		return "Product [id=" + id + ", name=" + name + ", price=" + price + ", remark=" + remark + ", date=" + date
+				+ "]";
+	}
 
 	public Integer getId() {
 		return id;

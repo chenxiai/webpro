@@ -2,12 +2,39 @@ package cn.web.dao;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import cn.web.utils.JdbcUtils;
 
 // 编写一个公共的dao父类,此类用来抽取共性的代码,子dao都需要继承此类
-public class BaseDao {
+// 只要类中有T类型,那么必须把当前类设置为T类
+public abstract class BaseDao<T> {
+
+	// 父类定义抽象方法,子类根据自身业务获取查询的结果集
+	protected abstract T getRow(ResultSet rs) throws SQLException;
+
+	// T: 只能代表某一个类型,具体可以交给子类指定
+	protected T getById(String sql, int id) {
+		T model = null;
+		Connection conn = null;
+		PreparedStatement pre = null;
+		ResultSet rs = null;
+		try {
+			conn = JdbcUtils.getConnection();
+			pre = conn.prepareStatement(sql);
+			pre.setInt(1, id);
+			rs = pre.executeQuery();
+			if (rs.next()) {
+				model = this.getRow(rs);
+			}
+			return model;
+		} catch (SQLException e) {
+			throw new RuntimeException(e);
+		} finally {
+			JdbcUtils.close(conn, pre);
+		}
+	}
 
 	// 通常把数据的插入、更新、和删除理解成广义更新
 	protected int update(String sql, Object[] param) {
