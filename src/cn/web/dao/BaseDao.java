@@ -27,6 +27,8 @@ public class BaseDao {
 			return pre.executeUpdate();
 		} catch (SQLException e) {
 			throw new RuntimeException(e);
+		} finally {
+			JdbcUtils.close(conn, pre);
 		}
 	}
 
