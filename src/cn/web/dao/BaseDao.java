@@ -1,8 +1,10 @@
 package cn.web.dao;
 
+import java.lang.reflect.Field;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -11,13 +13,10 @@ import cn.web.utils.JdbcUtils;
 
 // 编写一个公共的dao父类,此类用来抽取共性的代码,子dao都需要继承此类
 // 只要类中有T类型,那么必须把当前类设置为T类
-public abstract class BaseDao<T> {
-
-	// 父类定义抽象方法,子类根据自身业务获取查询的结果集
-	protected abstract T getRow(ResultSet rs) throws SQLException;
+public class BaseDao<T> {
 
 	// 可变参数就是数组,但是它比数组写法更灵活
-	public List<T> queryByName(String sql, Object... param) {
+	public List<T> queryByName(Class clazz, String sql, Object... param) {
 		List<T> tList = new ArrayList<T>();
 		Connection conn = null;
 		PreparedStatement pre = null;
@@ -29,12 +28,26 @@ public abstract class BaseDao<T> {
 				pre.setObject(i + 1, param[i]);
 			}
 			rs = pre.executeQuery();
+			// 获取关于 ResultSet 对象中列的类型和属性信息的对象(id,name)
+			ResultSetMetaData metaData = rs.getMetaData();
 			while (rs.next()) {
-				T t = this.getRow(rs);
-				tList.add(t);
+				// 表中的每条记录对应Java中一个对象
+				T model = (T) clazz.newInstance();
+				// 获取当前行字段信息
+				for (int i = 1; i <= metaData.getColumnCount(); i++) {
+					// 根据列索引获取列名称(id,name,price,remark)
+					String colName = metaData.getColumnName(i);
+					// 根据字段名,通过反射获取属性名
+					Field field = clazz.getDeclaredField(colName);
+					// 取消Java的语法检查
+					field.setAccessible(true);
+					field.set(model, rs.getObject(colName));
+				}
+				// 把赋值成功的对象交给集合
+				tList.add(model);
 			}
 			return tList;
-		} catch (SQLException e) {
+		} catch (Exception e) {
 			throw new RuntimeException(e);
 		} finally {
 			JdbcUtils.close(conn, pre, rs);

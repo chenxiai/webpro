@@ -1,6 +1,7 @@
 package cn.web.model;
 
-import java.sql.Date;
+import java.math.BigDecimal;
+import java.util.Date;
 
 // 数据库表对应Java的类
 // 表的记录对应Java的对象
@@ -10,7 +11,7 @@ public class Product extends Object {
 
 	private Integer id;
 	private String name;
-	private Double price;
+	private BigDecimal price;
 	private String remark;
 	private Date date;
 
@@ -37,11 +38,11 @@ public class Product extends Object {
 		this.name = name;
 	}
 
-	public Double getPrice() {
+	public BigDecimal getPrice() {
 		return price;
 	}
 
-	public void setPrice(Double price) {
+	public void setPrice(BigDecimal price) {
 		this.price = price;
 	}
 
