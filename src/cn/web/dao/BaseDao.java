@@ -7,6 +7,7 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import cn.web.utils.JdbcUtils;
@@ -20,6 +21,7 @@ public class BaseDao<T> {
 		List<T> tList = new ArrayList<T>();
 		Connection conn = null;
 		PreparedStatement pre = null;
+		Date date = new Date();
 		ResultSet rs = null;
 		try {
 			conn = JdbcUtils.getConnection();
@@ -37,10 +39,12 @@ public class BaseDao<T> {
 				for (int i = 1; i <= metaData.getColumnCount(); i++) {
 					// 根据列索引获取列名称(id,name,price,remark)
 					String colName = metaData.getColumnName(i);
+					System.out.println(colName);
 					// 根据字段名,通过反射获取属性名
 					Field field = clazz.getDeclaredField(colName);
 					// 取消Java的语法检查
 					field.setAccessible(true);
+					// rs.getObject(colName) ==> rs.getString("name")
 					field.set(model, rs.getObject(colName));
 				}
 				// 把赋值成功的对象交给集合
