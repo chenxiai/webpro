@@ -28,6 +28,7 @@
 		    商品价格:<input type="text" name="price" /><br />
 		    商品备注:<input type="text" name="remark"/><br />
 		 <button type="submit">提交</button>
+		 <input type="hidden" name="type" value="save" />
 	</form>
 	<p>下图为web开发层次结构图</p>
 	<img title="没事看一看" src="img/web.png" />
