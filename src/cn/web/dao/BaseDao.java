@@ -39,7 +39,7 @@ public class BaseDao<T> {
 				for (int i = 1; i <= metaData.getColumnCount(); i++) {
 					// 根据列索引获取列名称(id,name,price,remark)
 					String colName = metaData.getColumnName(i);
-					System.out.println(colName);
+					// System.out.println(colName);
 					// 根据字段名,通过反射获取属性名
 					Field field = clazz.getDeclaredField(colName);
 					// 取消Java的语法检查

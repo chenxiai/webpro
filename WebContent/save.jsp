@@ -2,7 +2,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-<title>Insert title here</title>
+<title>添加商品</title>
 </head>
 <body>
 	<ul>
@@ -17,6 +17,7 @@
 		<li>Servlet也是一个Java类,但是它可以接受Http。</li>
 		<li>正确解决思路:jsp->servlet->service->dao->db</li>
 	</ul>
+	<p>web中的乱码问题:项目编码、页面编码、request、连接数据库编码必须一致</p>
 	<!-- 
 	    请求: get请求,数据通过url地址栏提交,不安全.并且不能提交多媒体数据
 	      post请求: 支持多媒体和XML数据的提交,但是比较耗资源
@@ -28,5 +29,7 @@
 		    商品备注:<input type="text" name="remark"/><br />
 		 <button type="submit">提交</button>
 	</form>
+	<p>下图为web开发层次结构图</p>
+	<img title="没事看一看" src="img/web.png" />
 </body>
 </html>
