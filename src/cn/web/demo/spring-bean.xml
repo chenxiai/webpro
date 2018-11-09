@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans 
+       http://www.springframework.org/schema/beans/spring-beans-3.2.xsd">
+       <!-- 框架: 解决了共性代码, 并且把可变的参数都会存储XML中 -->
+       <!-- spring用来管理bean(类)的创建, 并且可以解决对象的创建 时间、数量、类型问题 -->
+       
+       
+       <!-- 1： spring中默认的bean是单例模式(仅仅创建一次,创建完毕之后对象会被spring缓存)可以通过: scope="prototype" 修改多例
+            2： 项目开发中: servlet service dao 都应该是单例模式
+            3: spring中只要配置文件一加载,bean就是被创建(饿汉模式), 但是可以通过lazy-init="true" 修改成懒汉模式
+            4: 
+       -->
+       <bean id="product" class="cn.web.model.Product">
+          <!-- spring中属性的值调用的是相应set方法 -->
+          <property name="name" value="小米" />
+          <property name="id" value="123" />
+          <!-- 对于复杂的数据类型,应该采用ref -->
+          <property name="date" ref="aaa" />
+       </bean>
+       
+       <bean id="aaa" class="java.util.Date" />
+       
+       
+</beans>

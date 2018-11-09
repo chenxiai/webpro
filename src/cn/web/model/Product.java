@@ -15,6 +15,11 @@ public class Product extends Object {
 	private String remark;
 	private Date date;
 
+	public Product() {
+		super();
+		System.out.println("Product().........");
+	}
+
 	// alt + shift + s
 	@Override
 	public String toString() {
@@ -31,11 +36,11 @@ public class Product extends Object {
 	}
 
 	public String getName() {
-		System.out.println("getName.........");
 		return name;
 	}
 
 	public void setName(String name) {
+
 		this.name = name;
 	}
 
@@ -60,6 +65,7 @@ public class Product extends Object {
 	}
 
 	public void setDate(Date date) {
+		System.out.println("setDate.........");
 		this.date = date;
 	}
 
