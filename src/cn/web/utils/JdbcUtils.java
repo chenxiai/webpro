@@ -25,7 +25,8 @@ public class JdbcUtils {
 	public static Connection getConnection() {
 		// 连接数据库的4个参数：账号、密码、连接字符串、驱动
 		try {
-			return DriverManager.getConnection("jdbc:mysql://localhost:3306/demo", "root", "root");
+			return DriverManager.getConnection("jdbc:mysql://localhost:3306/demo?characterEncoding=UTF-8", "root",
+					"root");
 		} catch (SQLException e) {
 			throw new RuntimeException(e);
 		}

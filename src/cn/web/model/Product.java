@@ -31,6 +31,7 @@ public class Product extends Object {
 	}
 
 	public String getName() {
+		System.out.println("getName.........");
 		return name;
 	}
 

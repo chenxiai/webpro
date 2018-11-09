@@ -10,6 +10,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import cn.web.model.Product;
 import cn.web.service.ProductServiceImpl;
@@ -19,10 +20,18 @@ import cn.web.service.ProductServiceImpl;
 @WebServlet("/ProductServlet")
 public class ProductServlet extends HttpServlet {
 
+	// Servlet默认是单例模式: 第一个访问的时候被创建,之后就常驻内存
+	public ProductServlet() {
+		System.out.println("ProductServlet().......");
+	}
+
+	// 在单例模式下,绝对不能有可以被用户修改的成员属性,否则会出现线程安全问题
+	// 解决方案: 每个用户都存储自己的查询关键字,在JSP中提供了session内置对象,可以满足此需求
+	// private String keyword;
+
 	// jsp->servlet->service->dao->db
 
 	private ProductServiceImpl productService = new ProductServiceImpl();
-	// private String keyword;
 
 	// doGet只能接受get请求
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -34,6 +43,9 @@ public class ProductServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		request.setCharacterEncoding("UTF-8");
+		// 获取每个用户自己的session
+		HttpSession session = request.getSession();
+		System.out.println("session" + session.getId());
 		// 根据不同的type的值,来进行不同的判断操作
 		String type = request.getParameter("type");
 		if (type.equals("save")) {
@@ -52,6 +64,8 @@ public class ProductServlet extends HttpServlet {
 		} else if (type.equals("query")) {
 			// 1:获取前端数据
 			String keyword = request.getParameter("keyword");
+			// 把关键字存储在session中,后面当前用户会使用
+			session.setAttribute("keyword", keyword);
 			// 2:调用业务逻辑
 			List<Product> proList = productService.queryByName(keyword);
 			// System.out.println(proList.size());
@@ -84,7 +98,14 @@ public class ProductServlet extends HttpServlet {
 			// 跳转到目标页面
 			response.sendRedirect("/webpro/query.jsp");
 		} else if (type.equals("delete")) {
-			System.out.println("实现删除功能,删除成功后按照原来的关键字进行查询操作!");
+			int id = Integer.parseInt(request.getParameter("id"));
+			productService.delete(id);
+			// 采用之前的关键字进行查询操作(之前的关键字已经存储在session中)
+			String keyword = (String) session.getAttribute("keyword");
+			List<Product> proList = productService.queryByName(keyword);
+			request.setAttribute("proList", proList);
+			RequestDispatcher dispatcher = request.getRequestDispatcher("/query.jsp");
+			dispatcher.forward(request, response);
 		}
 	}
 
