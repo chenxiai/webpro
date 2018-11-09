@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans 
+       http://www.springframework.org/schema/beans/spring-beans-3.2.xsd 
+       http://www.springframework.org/schema/aop 
+       http://www.springframework.org/schema/aop/spring-aop-3.2.xsd 
+       http://www.springframework.org/schema/tx 
+       http://www.springframework.org/schema/tx/spring-tx-3.2.xsd
+       ">
+         <!-- 配置声明事务AOP: Service的方法中可能会同时调用多个dao的方法,我们希望这些方法同时成功,
+                                   或者同时回滚,因此我们要向Service层动态切入事务 
+         -->
+         
+         <!-- 1: spring提供了专门用来管理事务的类称为事务管理器 -->
+         <bean id="tm" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+         	<!-- 事务是数据库的一个概念,因此管理器肯定需要依赖dataSource -->
+         	<property name="dataSource" ref="ds" />
+         </bean>
+         
+         <!-- 2: 配置哪些方法在运行时需要动态切入事务(AOP也称为声明式事务,一般都是向Service层切入)-->
+         
+         <!-- 动态切入的事务,称为通知 , 指定需要切入的方法-->
+         <tx:advice transaction-manager="tm" id="advice">
+         	<tx:attributes>
+         		<!-- save开头的方法,必须切入一个事务 -->
+         		<tx:method name="save*" propagation="REQUIRED"  />
+         		<tx:method name="update*" propagation="REQUIRED"  />
+         		<tx:method name="delete*" propagation="REQUIRED"  />
+         		<tx:method name="*" propagation="NEVER"  />
+         	</tx:attributes>
+         </tx:advice>
+         
+         <!-- 3: 配置切面表达式: 指定向哪些包的哪些类切入上面的事务 
+              execution(* cn.web.service.*.*(..)): 第一个*代表对返回值不做要求
+              cn.web.service.*.*: 切入的包.类.方法
+              (..) 方法参数的数量和类型都不无所谓
+         -->
+         <aop:config>
+         	<aop:pointcut expression="execution(* cn.web.service.*.*(..))" id="pointcut"/>
+         	<!-- 通知(运行时要切入事务) + 切面表达式 = 完整的AOP面向切面编程 -->
+         	<aop:advisor advice-ref="advice" pointcut-ref="pointcut"/>
+         </aop:config>
+         
+     	  
+     	  
+     	  
+     	  
+       
+</beans>

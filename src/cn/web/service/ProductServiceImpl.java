@@ -17,14 +17,18 @@ public class ProductServiceImpl {
 
 	public static void main(String[] args) {
 		// ProductServiceImpl serviceImpl = new ProductServiceImpl();
-		ApplicationContext context = new ClassPathXmlApplicationContext("spring-bean.xml");
+		ApplicationContext context = new ClassPathXmlApplicationContext("spring-*.xml");
 
 		// 所有的bean交给spring管理,因此在创建的时候,也需要采用Spring方式来创建bean
 		ProductServiceImpl serviceImpl = context.getBean("ps", ProductServiceImpl.class);
-		List<Product> proList = serviceImpl.queryByName("");
-		for (Product temp : proList) {
-			System.out.println(temp);
-		}
+		// List<Product> proList = serviceImpl.queryByName("");
+		// for (Product temp : proList) {
+		// System.out.println(temp);
+		// }
+		Product product = new Product();
+		product.setName("xxxx");
+		serviceImpl.save(product);
+
 	}
 
 	public void setProductDao(ProductDaoImpl productDao) {
@@ -49,7 +53,10 @@ public class ProductServiceImpl {
 	}
 
 	public int save(Product product) {
-		return productDao.save(product);
+		int count = productDao.save(product);
+		// 模拟异常
+		int result = 100 / 0;
+		return count;
 	}
 
 }
