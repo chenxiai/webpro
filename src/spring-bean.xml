@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans 
+       http://www.springframework.org/schema/beans/spring-beans-3.2.xsd 
+       http://www.springframework.org/schema/aop 
+       http://www.springframework.org/schema/aop/spring-aop-3.2.xsd 
+       http://www.springframework.org/schema/tx 
+       http://www.springframework.org/schema/tx/spring-tx-3.2.xsd
+       ">
+       <!-- 
+           	  没有spring:  ProductServletImpl ===> ProductDaoImpl ==> BaseDao ==> JdbcUtils
+           	 有Spring：ProductServletImpl ==>  ProductDaoImpl ==》 JdbcTemplate ==> DataSource
+        -->
+       
+     	<!-- spring重构dao与service 
+     	    1: 添加c3p0.jar此包提供了数据源,可以管理connection对象,此代码就取代JdbcUtils
+     	-->
+     	<bean id="ds" class="com.mchange.v2.c3p0.ComboPooledDataSource">
+     		<property name="user" value="root" />
+     		<property name="password" value="root" />
+     		<property name="jdbcUrl" value="jdbc:mysql://localhost:3306/demo?characterEncoding=UTF-8" />
+     		<property name="driverClass" value="com.mysql.jdbc.Driver" />
+     	</bean>
+     	
+     	<!-- 
+     		2: 采用spring提供的jdbcTemplate类来取代BaseDao,jdbcTemplate应该需要依赖dataSource,源码中
+     		肯定有setDataSource方法
+     	 -->
+     	 
+     	 <bean id="jt" class="org.springframework.jdbc.core.JdbcTemplate">
+     	 	<!-- name="dataSource" 会去调用源码中setDataSource方法,ref会在当前XML中查找对应id -->
+     	 	<property name="dataSource" ref="ds" />
+     	 </bean>
+     	 
+     	 <!-- 
+     	 	3: 配置ProductDaoImpl依赖jdbcTemplate,调用template提供的CRUD方法取代之前BaseDao
+     	  -->
+     	  
+     	  <bean id="pd" class="cn.web.dao.ProductDaoImpl">
+     	  		<!-- property注入本质调用当前属性set方法 -->
+     	  		<property name="jdbcTemplate" ref="jt" />
+     	  </bean>
+     	  
+     	  <!-- 
+     	  		4: 配置ProductServiceImpl，它依赖ProductDaoImpl
+     	   -->
+     	  <bean id="ps" class="cn.web.service.ProductServiceImpl">
+     	  		<property name="productDao" ref="pd" />
+     	  </bean>
+       
+</beans>

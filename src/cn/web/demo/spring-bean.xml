@@ -3,6 +3,8 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:schemaLocation="http://www.springframework.org/schema/beans 
        http://www.springframework.org/schema/beans/spring-beans-3.2.xsd">
+       <!-- XML有两种: 符合语法的XML，有效的XML(XSD就是XML的语法验证文件) -->
+       
        <!-- 框架: 解决了共性代码, 并且把可变的参数都会存储XML中 -->
        <!-- spring用来管理bean(类)的创建, 并且可以解决对象的创建 时间、数量、类型问题 -->
        
