@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+       http://www.springframework.org/schema/beans/spring-beans-3.2.xsd 
+       http://www.springframework.org/schema/mvc 
+       http://www.springframework.org/schema/mvc/spring-mvc-3.2.xsd 
+       http://www.springframework.org/schema/context 
+       http://www.springframework.org/schema/context/spring-context-3.2.xsd
+       ">
+    
+     <!-- 
+    
+    	注意： JDK1.8与Spring3.2.jar包不兼容，因此该项目已经替换成了spring4.2版本
+    
+    	0: PDF的流程图: JSP ==> DispatcherServlet ==> Controller ==>Service ==> DAO
+    	
+    	   1： 首先web.xml中配置 DispatcherServlet(1：过滤mvc后缀请求，2：加载spring-mvc配置文件)
+    	       
+    	         <url-pattern>*.mvc</url-pattern>
+    	         
+    	         <init-param>
+					<param-name>contextConfigLocation</param-name>
+					<param-value>classpath:spring-mvc.xml</param-value>
+				</init-param>
+		   注意默认情况DispatcherServlet需要在启动时创建,并且加载spring-mvc配置因此下面代码必不可少
+		 
+		 <load-on-startup>0</load-on-startup>
+		 
+		 2：创建Controller取代之前Servlet。
+		 
+		     1: @RequestMapping(value = "/product") 配置访问当前ProductController路径
+		     
+		     2: @RequestMapping("/save") 配置访问哪个方法
+		     
+		     3: ProductController需要交给mvc.xml配置文件管理(可以不用指定ID)
+		        
+		        <bean id="abc" class="cn.web.mvc.ProductController" />
+		        
+		 3： RequestMapping注解都是mvc框架的, 因此需要在配置文件中开启注解扫描
+		 
+		4： 配置ProductController依赖ProductService(在web.xml中需要加载spring ioc  aop配置文件)
+     -->
+       
+	<mvc:annotation-driven />
+	<context:component-scan base-package="cn.web.controller" />
+	
+	<bean class="cn.web.controller.ProductController">
+		<property name="productService" ref="ps" />
+	</bean>
+	 
+</beans>

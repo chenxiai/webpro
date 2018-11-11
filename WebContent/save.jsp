@@ -23,14 +23,11 @@
 	      post请求: 支持多媒体和XML数据的提交,但是比较耗资源
 	 -->
 	 <!-- jsp中所有的请求都应该从工程名开始 -->
-	<form action="/webpro/ProductServlet" method="post">
+	<form action="/webpro/product/save.mvc" method="post">
 		    商品名称:<input type="text" name="name"/><br />
 		    商品价格:<input type="text" name="price" /><br />
 		    商品备注:<input type="text" name="remark"/><br />
 		 <button type="submit">提交</button>
-		 <input type="hidden" name="type" value="save" />
 	</form>
-	<p>下图为web开发层次结构图</p>
-	<img title="没事看一看" src="img/web.png" />
 </body>
 </html>

@@ -9,10 +9,9 @@
 	
 </script>
 <body>
-	<form action="/webpro/ProductServlet" method="get">
+	<form action="/webpro/product/query.mvc" method="get">
 		商品名称:<input type="text" name="keyword" /><br />
 		<button type="submit">给我搜</button>
-		<input type="hidden" name="type" value="query" />
 	</form>
 	
 	<!-- jsp目前不推荐使用%(可维护性差),可以采用jstl标签来显示数据 -->
@@ -32,8 +31,8 @@
 				<td>${product.name}</td>
 				<td>${product.price}</td>
 				<td>${product.remark}</td>
-				<td><a href="/webpro/ProductServlet?type=getById&id=${product.id}">更新</a>|
-				   <a href="/webpro/ProductServlet?type=delete&id=${product.id}">删除</a></td>
+				<td><a href="/webpro/product/getById.mvc?id=${product.id}">更新</a>|
+				   <a href="/webpro/product/delete.mvc?id=${product.id}">删除</a></td>
 			</tr>
 		</c:forEach>
 	</table>

@@ -26,7 +26,7 @@ public class ProductServiceImpl {
 		// System.out.println(temp);
 		// }
 		Product product = new Product();
-		product.setName("xxxx");
+		// product.setName("xxxx");
 		serviceImpl.save(product);
 
 	}
@@ -55,7 +55,7 @@ public class ProductServiceImpl {
 	public int save(Product product) {
 		int count = productDao.save(product);
 		// 模拟异常
-		int result = 100 / 0;
+		// int result = 100 / 0;
 		return count;
 	}
 
