@@ -17,17 +17,13 @@ public class ProductServiceImpl {
 
 	public static void main(String[] args) {
 		// ProductServiceImpl serviceImpl = new ProductServiceImpl();
-		ApplicationContext context = new ClassPathXmlApplicationContext("spring-*.xml");
-
+		ApplicationContext context = new ClassPathXmlApplicationContext("spring-ioc.xml", "spring-aop.xml");
 		// 所有的bean交给spring管理,因此在创建的时候,也需要采用Spring方式来创建bean
 		ProductServiceImpl serviceImpl = context.getBean("ps", ProductServiceImpl.class);
-		// List<Product> proList = serviceImpl.queryByName("");
-		// for (Product temp : proList) {
-		// System.out.println(temp);
-		// }
-		Product product = new Product();
-		// product.setName("xxxx");
-		serviceImpl.save(product);
+		List<Product> proList = serviceImpl.queryByName("");
+		for (Product temp : proList) {
+			System.out.println(temp);
+		}
 
 	}
 

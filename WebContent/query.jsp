@@ -34,6 +34,8 @@
 				<th>姓名</th>
 				<th>价格</th>
 				<th>备注</th>
+				<th>日期</th>
+				<th>所属类别</th>
 				<th>操作</th>
 			</tr>
 			<!-- item是标签的属性,接受集合或者数组  EL表达式，可以获取request session application数据 -->
@@ -44,6 +46,8 @@
 					<td>${product.name}</td>
 					<td>${product.price}</td>
 					<td>${product.remark}</td>
+					<td>${product.date}</td>
+					<td>${product.category.cname}</td>
 					<td><a href="/webpro/product/getById.mvc?id=${product.id}">更新</a>|
 						<a href="/webpro/product/delete.mvc?id=${product.id}">删除</a></td>
 				</tr>

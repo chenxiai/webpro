@@ -7,7 +7,7 @@ import java.util.Date;
 // 表的记录对应Java的对象
 // 表的字段对应Java属性
 // 表的字段属性值,对应Java属性的值
-public class Product extends Object {
+public class Product {
 
 	private Integer id;
 	private String name;
@@ -15,16 +15,25 @@ public class Product extends Object {
 	private String remark;
 	private Date date;
 
+	private Category category;
+
+	public Category getCategory() {
+		return category;
+	}
+
+	public void setCategory(Category category) {
+		this.category = category;
+	}
+
 	public Product() {
 		super();
 		System.out.println("Product().........");
 	}
 
-	// alt + shift + s
 	@Override
 	public String toString() {
 		return "Product [id=" + id + ", name=" + name + ", price=" + price + ", remark=" + remark + ", date=" + date
-				+ "]";
+				+ ", category=" + category + "]";
 	}
 
 	public Integer getId() {

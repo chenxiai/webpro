@@ -37,11 +37,22 @@
      	  		<property name="jdbcTemplate" ref="jt" />
      	  </bean>
      	  
+     	   <bean id="cd" class="cn.web.dao.CategoryDaoImpl">
+     	  		<!-- property注入本质调用当前属性set方法 -->
+     	  		<property name="jdbcTemplate" ref="jt" />
+     	  </bean>
+     	  
      	  <!-- 
      	  		4: 配置ProductServiceImpl，它依赖ProductDaoImpl
      	   -->
      	  <bean id="ps" class="cn.web.service.ProductServiceImpl">
      	  		<property name="productDao" ref="pd" />
      	  </bean>
+     	  
+     	  <bean id="cs" class="cn.web.service.CategoryServiceImpl">
+     	  		<property name="categoryDao" ref="cd" />
+     	  </bean>
+     	  
+     	  
        
 </beans>

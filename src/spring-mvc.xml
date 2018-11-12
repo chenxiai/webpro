@@ -50,5 +50,9 @@
 	<bean class="cn.web.controller.ProductController">
 		<property name="productService" ref="ps" />
 	</bean>
+	
+	<bean class="cn.web.controller.CategoryController">
+		<property name="categoryService" ref="cs" />
+	</bean>
 	 
 </beans>

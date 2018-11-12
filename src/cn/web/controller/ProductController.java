@@ -15,8 +15,6 @@ public class ProductController extends BaseController {
 
 	@RequestMapping("/save")
 	public String insert(Product product) {
-		System.out.println(request);
-		System.out.println(session);
 		productService.save(product);
 		return "redirect:/query.jsp";
 	}
